@@ -92,8 +92,7 @@
   <form id="verifyForm">
     <div class="form-group">
       <label for="id_code">Code</label>
-      <input type="text" class="form-control" name="code" id="id_code" 
-             value="" required>
+      <input type="text" class="form-control" name="code" id="id_code" value="" required>
     </div>
 
     <div class="form-group">
@@ -105,38 +104,62 @@
 
   <!-- Image displayed after verification -->
   <img id="verifiedImage" src="" alt="Verified Certificate">
+
+  <!-- Download button -->
+  <a id="downloadBtn" href="#" download="" style="
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background-color: #28a745;
+      color: white;
+      padding: 8px 12px;
+      text-decoration: none;
+      border-radius: 4px;
+      display: none;
+  ">Download Certificate</a>
 </div>
 
 <script>
-  // Valid codes with respective images (using GitHub raw URLs)
+  // Valid codes with respective raw GitHub images
   const validCodes = {
-    "9284613057AB": "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/aryan%20verify.png",
+    "9284613057AB": "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/ar%20cert.jpg",
     "8042156937SR": "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/srh.png"
   };
 
+  const form = document.getElementById("verifyForm");
+  const result = document.getElementById("result");
+  const verifiedImage = document.getElementById("verifiedImage");
+  const downloadBtn = document.getElementById("downloadBtn");
 
-
-  document.getElementById("verifyForm").addEventListener("submit", function(e){
+  form.addEventListener("submit", function(e){
     e.preventDefault();
     const code = document.getElementById("id_code").value.trim();
-    const result = document.getElementById("result");
-    const verifiedImage = document.getElementById("verifiedImage");
 
     if(validCodes[code]){
       result.innerText = "Certificate Verified!";
       result.style.color = "green";
+
       verifiedImage.src = validCodes[code];
       verifiedImage.style.display = "block";
+
+      // Show and set download button
+      downloadBtn.style.display = "inline-block";
+      downloadBtn.href = validCodes[code];
+      downloadBtn.download = `certificate_${code}.jpg`;
     } else {
       result.innerText = "Invalid code";
       result.style.color = "red";
+
       verifiedImage.style.display = "none";
+      downloadBtn.style.display = "none";
     }
   });
 </script>
 
+
 </body>
 </html>
+
 
 
 
