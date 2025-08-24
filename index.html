@@ -125,10 +125,16 @@
 
 
 <script>
-  // Valid codes with respective raw GitHub images
+  // Valid codes with separate display and download URLs
   const validCodes = {
-    "9284613057AB": "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/ar%20cert.jpg",
-    "8042156937SR": "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/srs%20cert.jpg"
+    "9284613057AB": {
+      display: "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/aryan%20verify.png",
+      download: "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/ar%20cert.jpg"
+    },
+    "8042156937SR": {
+      display: "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/srh.png",
+      download: "https://raw.githubusercontent.com/Aryan2250/Saylorinfo/main/srs%20cert.jpg"
+    }
   };
 
   const form = document.getElementById("verifyForm");
@@ -141,17 +147,20 @@
     const code = document.getElementById("id_code").value.trim();
 
     if(validCodes[code]){
+      // Show verification result
       result.innerText = "Certificate Verified!";
-      result.style.color = "red";
+      result.style.color = "green";
 
-      verifiedImage.src = validCodes[code];
+      // Display the verification image
+      verifiedImage.src = validCodes[code].display;
       verifiedImage.style.display = "block";
 
-      // Show and set download button
+      // Configure download button
       downloadBtn.style.display = "inline-block";
-      downloadBtn.href = validCodes[code];
+      downloadBtn.href = validCodes[code].download;
       downloadBtn.download = `certificate_${code}.jpg`;
     } else {
+      // Invalid code feedback
       result.innerText = "Invalid code";
       result.style.color = "red";
 
@@ -161,9 +170,9 @@
   });
 </script>
 
-
 </body>
 </html>
+
 
 
 
