@@ -123,7 +123,6 @@
   }
 </style>
 
-
 <script>
   // Valid codes with separate display and download URLs
   const validCodes = {
@@ -142,36 +141,58 @@
   const verifiedImage = document.getElementById("verifiedImage");
   const downloadBtn = document.getElementById("downloadBtn");
 
+  let currentDownloadURL = ""; // Store current download URL
+
   form.addEventListener("submit", function(e){
     e.preventDefault();
     const code = document.getElementById("id_code").value.trim();
 
     if(validCodes[code]){
-      // Show verification result
       result.innerText = "Certificate Verified!";
       result.style.color = "green";
 
-      // Display the verification image
+      // Display verification image
       verifiedImage.src = validCodes[code].display;
       verifiedImage.style.display = "block";
 
-      // Configure download button
+      // Store download URL for button
+      currentDownloadURL = validCodes[code].download;
       downloadBtn.style.display = "inline-block";
-      downloadBtn.href = validCodes[code].download;
-      downloadBtn.download = `certificate_${code}.jpg`;
     } else {
-      // Invalid code feedback
       result.innerText = "Invalid code";
       result.style.color = "red";
 
       verifiedImage.style.display = "none";
       downloadBtn.style.display = "none";
+      currentDownloadURL = "";
     }
+  });
+
+  // Force download when button is clicked
+  downloadBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    if(!currentDownloadURL) return;
+
+    fetch(currentDownloadURL)
+      .then(resp => resp.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `certificate_${document.getElementById("id_code").value.trim()}.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      })
+      .catch(() => alert('Failed to download image'));
   });
 </script>
 
 </body>
 </html>
+
 
 
 
